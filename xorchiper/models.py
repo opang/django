@@ -8,6 +8,7 @@ class EnkripsiFiles(models.Model):
     size = models.CharField(max_length=255, blank=True)
     uploaded_at = models.DateTimeField(auto_now_add=True)
     time = models.CharField(max_length=50, blank=True)
+    keterangan = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
         return self.document
@@ -24,6 +25,7 @@ class DekripsiFiles(models.Model):
     size = models.CharField(max_length=255, blank=True)
     uploaded_at = models.DateTimeField(auto_now_add=True)
     time = models.CharField(max_length=50, blank=True)
+    keterangan = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
         return self.document

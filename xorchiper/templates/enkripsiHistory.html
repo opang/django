@@ -23,9 +23,15 @@
           <li class="nav-item">
             <a class="nav-link" aria-current="page" href="{% url 'home' %}">Home</a>
           </li>
+          {% if not user.is_superuser %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'enkripsi' %}">Enkripsi</a>
+            <a class="nav-link" href="{% url 'transferFiles' %}">Transfer file</a>
           </li>
+          {% endif %}
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'transferFileHistory' %}">transfer file history</a>
+          </li>
+          {% if user.is_authenticated and user.is_staff%}
           <li class="nav-item">
             <a class="nav-link" href="{% url 'dekripsi' %}">Dekripsi</a>
           </li>
@@ -35,17 +41,20 @@
             </a>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="{% url 'dekripsiHistory' %}">Dekripsi history</a></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
             </ul>
           </li>
+          {% endif %}
         </ul>
       </div>
       <a href="{% url 'logout' %}" class="btn btn-primary">logout </a>
+      {% if user.is_authenticated %}
+      <p class="px-3 mt-3" style="align-items: center; ">{{ user.username }}</p>
+      {% endif %}
     </div>
   </nav>
 
   <div class="container table-responsive">
-    <h1 class="py-3">enkripsi history</h1>
+    <h1 class="py-3">Transfer file history</h1>
     {% for message in messages %}
           {% if message.tags %}
 
@@ -57,11 +66,14 @@
         <thead>
           <tr>
             <th>nama file</th>
+            <th>keterangan</th>
             <th>file</th>
-            <th>encrypted by</th>
+            <th>User</th>
             <th>size</th>
-            <th>lama enkripsi(detik)</th>
+            <th>uploaded at</th>
+            {% if user.is_authenticated and user.is_staff%}
             <th>download</th>
+            {% endif %}
             <th>delete</th>
           </tr>
         </thead>
@@ -70,10 +82,12 @@
             {% for file in files %}
           <tr>
             <td>{{file.document}}</td>
+            <td>{{file.keterangan}}</td>
             <td>{{file.fi}}</td>
             <td >{{file.encrypted_by}}</td>
             <td>{{file.size|filesizeformat}}</td>
-            <td>{{file.time}}</td>
+            <td>{{file.uploaded_at}}</td>
+            {% if user.is_authenticated and user.is_staff%}
             <td style="text-align: center;">
                 <a href="{{file.fi.url}}" download class="btn btn-primary ">
                     <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -83,6 +97,7 @@
                     </svg>
                 </a>
             </td>
+            {% endif %}
             <td>
                 <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#hapus-{{file.id}}">
                     <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

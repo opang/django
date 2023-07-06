@@ -28,10 +28,10 @@ urlpatterns = [
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('signup/', views.signup, name='signup'),
-    path('enkripsi/', views.enkripsi, name='enkripsi'),
+    path('transferFiles/', views.transferFiles, name='transferFiles'),
     path('dekripsi/', views.dekripsi, name='dekripsi'),
-    path('enkripsiHistory/', views.enkripsiHistory, name='enkripsiHistory'),
-    path('enkripsiHistory/<int:id_file>', views.delete, name='delete'),
+    path('transferFileHistory/', views.transferFileHistory, name='transferFileHistory'),
+    path('transferFileHistory/<int:id_file>', views.delete, name='delete'),
     path('dekripsiHistory/', views.dekripsiHistory, name='dekripsiHistory'),
     path('dekripsiHistory/<int:id_file>', views.deletee, name='deletee'),
     

@@ -21,7 +21,9 @@ def index(request):
 
 @login_required(login_url=settings.LOGIN_URL)
 def home(request):
+    files = EnkripsiFiles.objects.all()
     context = {
+        'files' : files,
         'name' : 'xorchiper',
     }
 
@@ -29,12 +31,13 @@ def home(request):
 
 
 @login_required(login_url=settings.LOGIN_URL)
-def enkripsi(request):
+def transferFiles(request):
 
     if request.method == "POST":
         namaFile = request.POST.get('namafile')
         myfile = request.FILES['fil']
-        kunci = request.POST.get('kunci')
+        kunci = "ae6hc0n"
+        ket = request.POST.get('keterangan')
         i = 0
         max = 6 - 1
 
@@ -69,11 +72,11 @@ def enkripsi(request):
             lama_eksekusi = stop - start 
 
             size = myfile.size
-            form = EnkripsiFiles(document=namaFile, fi=filename, encrypted_by=user, size=size, time=lama_eksekusi)
+            form = EnkripsiFiles(document=namaFile, fi=filename, encrypted_by=user, size=size, time=lama_eksekusi, keterangan=ket)
             form.save()
 
-            messages.success(request, "file berhasil di enkripsi")
-            return redirect('enkripsiHistory')
+            messages.success(request, "file berhasil di upload")
+            return redirect('transferFileHistory')
 
     files = EnkripsiFiles.objects.all()
     konteks = {
@@ -110,8 +113,10 @@ def signup(request):
     return render(request, 'registration/signup.html')
 
 @login_required(login_url=settings.LOGIN_URL)
-def enkripsiHistory(request):
-    files = EnkripsiFiles.objects.all()
+def transferFileHistory(request):
+    nama = request.user.username
+    files = EnkripsiFiles.objects.filter(encrypted_by=nama)
+
     konteks = {
         'files' : files,
         'name' : 'xorchiper',
@@ -131,7 +136,7 @@ def delete(request, id_file):
     file = EnkripsiFiles.objects.get(id=id_file)
     file.delete()
 
-    return redirect('enkripsiHistory')
+    return redirect('transferFileHistory')
 
 def deletee(request, id_file):
     file = DekripsiFiles.objects.get(id=id_file)
@@ -145,7 +150,8 @@ def dekripsi(request):
     if request.method == "POST":
         namaFile = request.POST.get('namafile')
         myfile = request.FILES['fil']
-        kunci = request.POST.get('kunci')
+        kunci = "ae6hc0n"
+        ket = request.POST.get('keterangan')
         i = 0
         max = 6 - 1
 
@@ -182,7 +188,7 @@ def dekripsi(request):
          
 
             size = myfile.size
-            form = DekripsiFiles(document=namaFile, fi=filename, encrypted_by=user, size=size, time=lama_eksekusi)
+            form = DekripsiFiles(document=namaFile, fi=filename, encrypted_by=user, size=size, time=lama_eksekusi,keterangan=ket)
             form.save()
 
             messages.success(request, "file berhasil di dekripsi")

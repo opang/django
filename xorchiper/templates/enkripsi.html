@@ -24,24 +24,24 @@
             <a class="nav-link " aria-current="page" href="{% url 'home' %}">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" href="{% url 'enkripsi' %}">Enkripsi</a>
+            <a class="nav-link active" href="{% url 'transferFiles' %}">Transfer file</a>
           </li>
+          {% if user.is_authenticated and user.is_staff%}
           <li class="nav-item">
             <a class="nav-link" href="{% url 'dekripsi' %}">Dekripsi</a>
           </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Dropdown link
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="{% url 'enkripsiHistory' %}">Enkripsi history</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
+          {% endif %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'transferFileHistory' %}">transfer file history</a>
           </li>
+       
+          
         </ul>
       </div>
       <a href="{% url 'logout' %}" class="btn btn-primary">logout </a>
+      {% if user.is_authenticated %}
+      <p class="px-3 mt-3" style="align-items: center; ">{{ user.username }}</p>
+      {% endif %}
     </div>
   </nav>
 
@@ -53,22 +53,22 @@
             <div class="alert alert-danger">{{message}}</div>
           {% endif %}
         {% endfor %}
-        <form enctype="multipart/form-data" action="{% url 'enkripsi' %}" method="POST">
+        <form enctype="multipart/form-data" action="{% url 'transferFiles' %}" method="POST">
           {% csrf_token %}
-            <h1 class="h3 mb-5 fw-normal py-2" style="text-align: center;">Enkripsi File</h1>
+            <h1 class="h3 mb-5 fw-normal py-2" style="text-align: center;">Transfer file</h1>
             <div class="form-floating mx-3 mb-3">
-              <input type="text" class="form-control" id="floatingPassword" placeholder="Kunci" name="namafile" required>
+              <input type="text" class="form-control" id="floatingPassword" placeholder="namafile" name="namafile" required>
               <label for="floatingPassword">Nama File</label>
-
-          </div>
+            </div>
             <div class="mb-3 mx-3">
                 <input class="form-control" type="file" id="formFile" name="fil" required>
             </div>
+           
             <div class="form-floating mx-3 mb-3">
-                <input type="password" class="form-control" id="floatingPassword" placeholder="Kunci" name="kunci" required>
-                <label for="floatingPassword">Kunci</label>
-
+              <input type="text" class="form-control" id="floatingPassword" placeholder="namafile" name="keterangan" required>
+              <label for="floatingPassword">keterangan</label>
             </div>
+
             <button type="submit" class="btn btn-primary mx-3 mb-5">Submit</button>
         </form>
     </div>

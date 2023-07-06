@@ -23,35 +23,98 @@
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
           </li>
+
+          {% if not user.is_superuser %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'enkripsi' %}">Enkripsi</a>
-          </li>
+            <a class="nav-link" href="{% url 'transferFiles' %}">Transfer file</a>
+          </li>    
+          {% endif %}
+
+          {% if user.is_authenticated and user.is_superuser%}
           <li class="nav-item">
             <a class="nav-link" href="{% url 'dekripsi' %}">Dekripsi</a>
           </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Dropdown link
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="{% url 'enkripsiHistory' %}">Enkripsi history</a></li>
-              <li><a class="dropdown-item" href="{% url 'dekripsiHistory' %}">Dekripsi history</a></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'dekripsiHistory' %}">Dekripsi history</a>
+          </li>      
+          {% endif %}
+          {% if not user.is_superuser %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'transferFileHistory' %}">transfer file history</a>
           </li>
+          {% endif %}
+
         </ul>
       </div>
       <a href="{% url 'logout' %}" class="btn btn-primary">logout </a>
+      {% if user.is_authenticated %}
+      <p class="px-3 mt-3" style="align-items: center; ">{{ user.username }}</p>
+      {% endif %}
     </div>
   </nav>
 
+  {% if user.is_authenticated and user.is_staff %}
+  <div class="container table-responsive">
+    <h1 class="py-3">Transfer file history</h1>
+    <table class="table shadow table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>nama file</th>
+            <th>keterangan</th>
+            <th>file</th>
+            <th>User</th>
+            <th>size</th>
+            <th>uploaded at</th>
+            {% if user.is_authenticated and user.is_staff%}
+            <th>download</th>
+            {% endif %}
+          </tr>
+        </thead>
+        <tbody>
+        {% if files %}
+            {% for file in files %}
+          <tr>
+            <td>{{file.document}}</td>
+            <td>{{file.keterangan}}</td>
+            <td>{{file.fi}}</td>
+            <td >{{file.encrypted_by}}</td>
+            <td>{{file.size|filesizeformat}}</td>
+            <td>{{file.uploaded_at}}</td>
+            {% if user.is_authenticated and user.is_staff%}
+            <td style="text-align: center;">
+                <a href="{{file.fi.url}}" download class="btn btn-primary ">
+                    <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g id="Interface / Download">
+                        <path id="Vector" d="M6 21H18M12 3V17M12 17L17 12M12 17L7 12" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </g>
+                    </svg>
+                </a>
+            </td>
+            {% endif %}
+          
+            
+            
+            
+          </tr>
+            {% endfor %}
+        {% endif %}
+        </tbody>
+      </table>
+  </div>
+  {% if not files %}
+    
+    <h3 class="container text-secondary">tidak ada data</h3>
+  {% endif %}
+
+
+  {% elif not user.is_superuser %}
   <div class="px-4 py-5 my-5 text-center" >
     {% if user.is_authenticated %}
     <h1 class="display-5 fw-bold text-body-emphasis">Selamat datang, {{ user.username }}!</h1>
-    </div>
-     
     {% endif %}
-    
   </div>
+  {% endif %}
+
+  
 </body>
 </html>

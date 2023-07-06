@@ -23,24 +23,24 @@
           <li class="nav-item">
             <a class="nav-link" aria-current="page" href="{% url 'home' %}">Home</a>
           </li>
+          {% if not user.is_superuser %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'enkripsi' %}">Enkripsi</a>
+            <a class="nav-link" href="{% url 'transferFiles' %}">Transfer file</a>
           </li>
+          {% endif %}
           <li class="nav-item">
             <a class="nav-link" href="{% url 'dekripsi' %}">Dekripsi</a>
           </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Dekripsi history
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="{% url 'enkripsiHistory' %}">Enkripsi history</a></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'dekripsiHistory' %}">Dekripsi history</a>
           </li>
+
         </ul>
       </div>
       <a href="{% url 'logout' %}" class="btn btn-primary">logout </a>
+      {% if user.is_authenticated %}
+      <p class="px-3 mt-3" style="align-items: center; ">{{ user.username }}</p>
+      {% endif %}
     </div>
   </nav>
 
@@ -59,10 +59,11 @@
         <thead>
           <tr>
             <th>nama file</th>
+            <th>keterangan</th>
             <th>file</th>
-            <th>decrypted by</th>
+            <th>user</th>
             <th>size</th>
-            <th>lama enkripsi(detik)</th>
+            <th>uploaded at</th>
             <th>download</th>
             <th>delete</th>
           </tr>
@@ -72,10 +73,11 @@
             {% for file in files %}
           <tr>
             <td>{{file.document}}</td>
+            <td>{{file.keterangan}}</td>
             <td>{{file.fi}}</td>
             <td >{{file.encrypted_by}}</td>
             <td>{{file.size|filesizeformat}}</td>
-            <td>{{file.time}}</td>
+            <td>{{file.uploaded_at}}</td>
             <td style="text-align: center;">
                 <a href="{{file.fi.url}}" download class="btn btn-primary ">
                     <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

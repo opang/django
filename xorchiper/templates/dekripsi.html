@@ -23,25 +23,24 @@
           <li class="nav-item">
             <a class="nav-link " aria-current="page" href="{% url 'home' %}">Home</a>
           </li>
+          {% if not user.is_superuser %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'enkripsi' %}">Enkripsi</a>
+            <a class="nav-link" href="{% url 'transferFiles' %}">Enkripsi</a>
           </li>
+          {% endif %}
           <li class="nav-item">
             <a class="nav-link active" href="{% url 'dekripsi' %}">Dekripsi</a>
           </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Dropdown link
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="{% url 'enkripsiHistory' %}">Enkripsi history</a></li>
-              <li><a class="dropdown-item" href="{% url 'dekripsiHistory' %}">Dekripsi history</a></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'dekripsiHistory' %}">Dekripsi history</a>
           </li>
+        
         </ul>
       </div>
       <a href="{% url 'logout' %}" class="btn btn-primary">logout </a>
+      {% if user.is_authenticated %}
+      <p class="px-3 mt-3" style="align-items: center; ">{{ user.username }}</p>
+      {% endif %}
     </div>
   </nav>
 
@@ -62,14 +61,14 @@
               <input type="text" class="form-control" id="floatingPassword" placeholder="Kunci" name="namafile" required>
               <label for="floatingPassword">Nama File</label>
 
-          </div>
+            </div>
             <div class="mb-3 mx-3">
                 <input class="form-control" type="file" id="formFile" name="fil" required>
             </div>
+    
             <div class="form-floating mx-3 mb-3">
-                <input type="password" class="form-control" id="floatingPassword" placeholder="Kunci" name="kunci" required>
-                <label for="floatingPassword">Kunci</label>
-
+              <input type="text" class="form-control" id="floatingPassword" placeholder="namafile" name="keterangan" required>
+              <label for="floatingPassword">keterangan</label>
             </div>
             <button type="submit" class="btn btn-primary mx-3 mb-5">Submit</button>
         </form>
